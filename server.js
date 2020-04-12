@@ -55,13 +55,20 @@ mongo.connect(process.env.DATABASE, (err, db) => {
         /*
         *  ADD YOUR CODE BELOW
         */
-      
-      
-      
-      
-      
-      
-      
+        app.route("/auth/github")
+        	.get(passport.authenticate("github"));
+        
+        // app.get("/auth/github", passport.authenticate("github"));
+
+        // app.post("/auth/github/callback", passport.authenticate("local", {failureRedirect: "/"}), function(req, res) {
+        // 	res.redirect("/profile");
+        // })
+
+        app.route("/auth/github/callback")
+        	.get(passport.authenticate("github", {failureRedirect: "/"}), function(req, res) {
+        		res.redirect("/profile");
+       		});
+  
         /*
         *  ADD YOUR CODE ABOVE
         */
@@ -89,7 +96,8 @@ mongo.connect(process.env.DATABASE, (err, db) => {
             .send('Not Found');
         });
       
-        app.listen(process.env.PORT || 3000, () => {
-          console.log("Listening on port " + process.env.PORT);
+      	let port = process.env.PORT || 3000;
+        app.listen(port, () => {
+          console.log("Listening on port " + port + "!");
         });  
 }});
