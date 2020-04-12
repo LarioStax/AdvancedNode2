@@ -60,7 +60,7 @@ mongo.connect(process.env.DATABASE, (err, db) => {
         
         // app.get("/auth/github", passport.authenticate("github"));
 
-        // app.post("/auth/github/callback", passport.authenticate("local", {failureRedirect: "/"}), function(req, res) {
+        // app.get("/auth/github/callback", passport.authenticate("github", {failureRedirect: "/"}), function(req, res) {
         // 	res.redirect("/profile");
         // })
 
