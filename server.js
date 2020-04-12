@@ -52,10 +52,21 @@ mongo.connect(process.env.DATABASE, (err, db) => {
             );
         });
 
-      
         /*
         *  ADD YOUR CODE BELOW
         */
+
+        passport.use(new GitHubStrategy({
+        	clientID: process.env.GITHUB_CLIENT_ID,
+        	clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        	callbackURL: "https://stax-advancednode2.glitch.me/auth/github/callback"
+        }, 
+	        function(acessToken, refreshToken, profile, cb) {
+	        	console.log(profile);
+	        }
+        ));
+
+
         app.route("/auth/github")
         	.get(passport.authenticate("github"));
         
@@ -69,6 +80,7 @@ mongo.connect(process.env.DATABASE, (err, db) => {
         	.get(passport.authenticate("github", {failureRedirect: "/"}), function(req, res) {
         		res.redirect("/profile");
        		});
+
   
         /*
         *  ADD YOUR CODE ABOVE
