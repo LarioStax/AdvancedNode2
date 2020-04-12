@@ -63,6 +63,28 @@ mongo.connect(process.env.DATABASE, (err, db) => {
         }, 
 	        function(acessToken, refreshToken, profile, cb) {
 	        	console.log(profile);
+
+	        	db.collection("socialusers").findAndModify( //findAndModify modifies or creates if not found!
+	        		{id: profile.id}, 
+	        		{},
+	        		{$setOnInsert: {
+	        			id: profile.id,
+	        			name: profile.displayName || "Name hidden",
+	        			photo: profile.photos[0].value || "",
+	        			email: profile.email || "No public email",
+	        			created_on: new Date(),
+	        			provider: profile.provider || ""
+	        		},
+	        		$set: {
+	        			last_login: new Date()
+	        		},
+	        		$inc:{
+	        			login_count: 1
+	        		}},
+	        		{upsert:true, new:true},
+	        		function (err, modifiedUser) {
+	        			return cb(null, modifiedUser.value);
+	        		});
 	        }
         ));
 
